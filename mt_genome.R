@@ -4,60 +4,39 @@
 devtools::install_github("stephenturner/annotables")
 library(annotables) # gene and tRNA annotations (grch38)
 library(dplyr)
-library(RCircos)
 
 # extract only mtDNA
 mt <- grch38 %>%
   filter(chr == "MT")
-# convert column headers
-colnames(mt)
-colnames(mt) <- c("ensgene", "entrez", "GeneName", "Chromosome", "ChromStart", "ChromEnd", "strand", "biotype", "description")
-# reorder columns
-mt <- mt[c(4,5,6,1,2,3,7,8,9)]
-# remove -1 strand
-mt <- mt %>%
-  filter(strand == 1)
+# clean up gene labels
+mt$symbol <- gsub("MT-", "", mt$symbol)
+# add colors for protein vs tRNA
+mt <- mutate(mt, color=biotype) # add duplicate column with new name
+mt$color <- gsub("protein_coding", "blue", mt$color)
+mt$color <- gsub("Mt_tRNA", "green", mt$color)
+mt$color <- gsub("Mt_rRNA", "purple", mt$color)
 
-# subsetting to troubleshoot
-mt <- mt[1:2, ]
+# highlight files
+# sense
+mtSense <- mt %>%
+  filter(strand == 1) %>%
+  dplyr::select(chr, start, end, color, symbol)
+# save to highlight table
+mtSenseTrim <- dplyr::select(mtSense, chr, start, end, color)
+write.table(mtSenseTrim, "circos/highlight_sense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
 
-# create dummy ideogram for plot
-base <- read.csv("mt_full.tsv", sep=" ")
-base$Chromosome <- as.character(base$Chromosome)
+# antisense
+mtAnti <- mt %>%
+  filter(strand == -1) %>%
+  dplyr::select(chr, start, end, color, symbol)
+# add in D-loop
+mtAnti <- rbind(mtAnti, c("MT", "1", "576", "yellow", "D-loop"))
+mtAnti <- rbind(mtAnti, c("MT", "16024", "16569", "yellow", "D-loop"))
+# save to highlight table
+mtAntiTrim <- dplyr::select(mtAnti, chr, start, end, color)
+write.table(mtAntiTrim, "circos/highlight_antisense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
 
-## plot diagram
-
-# initialize parameters
-cyto.info <- base
-chr.exclude <- NULL
-tracks.inside <- 0
-tracks.outside <- 1
-RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
-# rcircos.params <- RCircos.Get.Plot.Parameters()
-# rcircos.params$base.per.unit <- 3000
-# RCircos.Reset.Plot.Parameters(rcircos.params)
-RCircos.List.Plot.Parameters()
-
-out.file <- "test.pdf"
-#pdf(file=out.file, height=8, width=8, compress=TRUE)
-RCircos.Set.Plot.Area()
-par(mai=c(0.25, 0.25, 0.25, 0.25))
-plot.new()
-plot.window(c(-2.5,2.5), c(-2.5, 2.5))
-
-?RCircos.Chromosome.Ideogram.Plot()
-?RCircos.Draw.Chromosome.Ideogram()
-
-# plot gene connectors
-#name.col <- 6
-side <- "out"
-track.num <- 1
-RCircos.Gene.Connector.Plot(mt, track.num, side)
-#track.num <-2
-#RCircos.Gene.Name.Plot(mt, name.col, track.num, side)
-#?RCircos.Reset.Plot.Parameters # modify RCircos core components
-# RCircos.Reset.Plot.Ideogram(base) RCircos.Get.Plot.Ideogram()
-# RCircos.Get.Plot.Positions()  RCircos.Reset.Plot.Positions()
-# RCircos.Reset.Plot.Parameters() RCircos.Get.Plot.Parameters()
-
-#dev.off()
+# gene label file
+mtGenes <- rbind(mtSense, mtAnti)
+mtGenes <- dplyr::select(mtGenes, chr, start, end, symbol)
+write.table(mtGenes, "circos/gene_labels.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
