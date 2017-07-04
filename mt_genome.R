@@ -35,6 +35,12 @@ mtAnti <- rbind(mtAnti, c("MT", "16024", "16569", "D-loop", "fill_color=yellow")
 write.table(mtAnti, "circos/data/highlight_antisense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
 
 # gene label file
+# combine sense and antisense
 mtGenes <- rbind(mtSense, mtAnti)
-mtGenes <- dplyr::select(mtGenes, chr, start, end, symbol)
+# find full gene names to match symbols
+names <- read.table("rCRS.gb.txt", sep="\t", skip=85)
+names <- unique(filter(names, grepl("gene=", V1)))
+names <- c(gsub("^.*gene=", "", names$V1, perl=TRUE), "D-loop", "D-loop")
+mtGenes <- cbind(mtGenes, names)
+mtGenes <- dplyr::select(mtGenes, chr, start, end, names)
 write.table(mtGenes, "circos/data/gene_labels.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
