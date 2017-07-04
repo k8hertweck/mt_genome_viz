@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
 circosMT/circos.png
 circosMT/circos.svg
