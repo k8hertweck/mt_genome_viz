@@ -64,3 +64,10 @@ RCircos.Link.Plot(RCircos.Link.Data, track.num, TRUE)
 data(RCircos.Ribbon.Data)
 RCircos.Ribbon.Plot(ribbon.data=RCircos.Ribbon.Data, track.num=11, by.chromosome=FALSE, twist=FALSE)
 dev.off()
+
+#RCircos.Gene.Name.Plot(mt, name.col, track.num, side)
+#?RCircos.Reset.Plot.Parameters # modify RCircos core components
+# RCircos.Reset.Plot.Ideogram(base) RCircos.Get.Plot.Ideogram()
+# RCircos.Get.Plot.Positions()  RCircos.Reset.Plot.Positions()
+# RCircos.Reset.Plot.Parameters() RCircos.Get.Plot.Parameters()
+
