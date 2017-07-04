@@ -20,21 +20,19 @@ mt$color <- gsub("Mt_rRNA", "fill_color=purple", mt$color)
 # sense
 mtSense <- mt %>%
   filter(strand == 1) %>%
-  dplyr::select(chr, start, end, color, symbol)
+  dplyr::select(chr, start, end, symbol, color)
 # save to highlight table
-mtSenseTrim <- dplyr::select(mtSense, chr, start, end, color)
-write.table(mtSenseTrim, "circos/data/highlight_sense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
+write.table(mtSense, "circos/data/highlight_sense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
 
 # antisense
 mtAnti <- mt %>%
   filter(strand == -1) %>%
-  dplyr::select(chr, start, end, color, symbol)
+  dplyr::select(chr, start, end, symbol, color)
 # add in D-loop
-mtAnti <- rbind(mtAnti, c("MT", "1", "576", "fill_color=yellow", "D-loop"))
-mtAnti <- rbind(mtAnti, c("MT", "16024", "16569", "fill_color=yellow", "D-loop"))
+mtAnti <- rbind(mtAnti, c("MT", "1", "576", "D-loop", "fill_color=yellow"))
+mtAnti <- rbind(mtAnti, c("MT", "16024", "16569", "D-loop", "fill_color=yellow"))
 # save to highlight table
-mtAntiTrim <- dplyr::select(mtAnti, chr, start, end, color)
-write.table(mtAntiTrim, "circos/data/highlight_antisense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
+write.table(mtAnti, "circos/data/highlight_antisense.txt", row.names=FALSE, col.names = FALSE, quote = FALSE)
 
 # gene label file
 mtGenes <- rbind(mtSense, mtAnti)
