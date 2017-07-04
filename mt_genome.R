@@ -4,6 +4,7 @@
 devtools::install_github("stephenturner/annotables")
 library(annotables) # gene and tRNA annotations (grch38)
 library(dplyr)
+library(RCircos)
 
 # extract only mtDNA
 mt <- grch38 %>%
@@ -21,15 +22,10 @@ mt <- mt %>%
 mt <- mt[1:2, ]
 
 # create dummy ideogram for plot
-base <- read.csv("~/Desktop/mt_full.tsv", sep=" ")
+base <- read.csv("mt_full.tsv", sep=" ")
 base$Chromosome <- as.character(base$Chromosome)
 
 ## plot diagram
-
-#pdf("~/Desktop/test.pdf")
-
-RCircos.Set.Plot.Area()
-RCircos.Chromosome.Ideogram.Plot()
 
 # initialize parameters
 cyto.info <- base
@@ -37,6 +33,20 @@ chr.exclude <- NULL
 tracks.inside <- 0
 tracks.outside <- 1
 RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
+# rcircos.params <- RCircos.Get.Plot.Parameters()
+# rcircos.params$base.per.unit <- 3000
+# RCircos.Reset.Plot.Parameters(rcircos.params)
+RCircos.List.Plot.Parameters()
+
+out.file <- "test.pdf"
+#pdf(file=out.file, height=8, width=8, compress=TRUE)
+RCircos.Set.Plot.Area()
+par(mai=c(0.25, 0.25, 0.25, 0.25))
+plot.new()
+plot.window(c(-2.5,2.5), c(-2.5, 2.5))
+
+?RCircos.Chromosome.Ideogram.Plot()
+?RCircos.Draw.Chromosome.Ideogram()
 
 # plot gene connectors
 #name.col <- 6
