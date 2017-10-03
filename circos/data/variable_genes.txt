@@ -1,0 +1,4 @@
+MT 5904 7445 fill_color=black #COX1
+MT 8527 9207 fill_color=black #ATP6
+MT 12337 14148 fill_color=black #ND5
+MT 14747 15887 fill_color=black #CYTB
