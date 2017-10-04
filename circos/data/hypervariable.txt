@@ -1,4 +1,3 @@
-MT 57 372 fill_color=vlgrey #HV
-MT 438 574 fill_color=vlgrey #HV
-MT 8470 13447 fill_color=233,163,201 #common deletion
-MT 16024 16383 fill_color=vlgrey #HV
+MT 57 372 fill_color=dgrey #HV
+MT 438 574 fill_color=dgrey #HV
+MT 16024 16383 fill_color=dgrey #HV

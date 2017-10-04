@@ -1,0 +1,1 @@
+MT 8470 13447 fill_color=233,163,201 #common deletion
