@@ -4,7 +4,7 @@ Visualization of the human mitochondrial genome
 
 Circular visualization of the human mitochondrial genome using R and circos. 
 
-To create the figure:
+To create Figure 1 from [Hertweck and Dasgupta, 2017](https://www.frontiersin.org/articles/10.3389/fonc.2017.00262/full):
 * execute `mt_genome.R` from the project directory.
 * from `circos/`, execute `PATH/TO/CIRCOS/circos -conf circos.conf`
 
